@@ -17,8 +17,8 @@ interface UserDropdownProps {
 }
 
 export default function UserDropdown({ 
-  userName = "Kylie Lee", 
-  userInitials = "KL",
+  userName = "Douglas Auclair", 
+  userInitials = "DA",
   accountId = "Account q106-ehjw-q346g"
 }: UserDropdownProps) {
   const navigate = useNavigate();

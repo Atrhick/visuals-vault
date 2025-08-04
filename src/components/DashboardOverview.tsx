@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Plus, TrendingUp, TrendingDown, MoreHorizontal, Activity, Target } from "lucide-react";
+import PortfolioPerformance from "@/components/PortfolioPerformance";
+import RiskAssessment from "@/components/RiskAssessment";
+import DiversificationAnalysis from "@/components/DiversificationAnalysis";
 
 interface Asset {
   id: string;
@@ -137,7 +140,7 @@ export default function DashboardOverview() {
   };
 
   return (
-    <div className="p-6 space-y-6 bg-background min-h-screen">
+    <div className="px-6 pb-6 space-y-6 bg-background min-h-screen">
       {/* Top KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Portfolio Performance Card */}
@@ -227,6 +230,19 @@ export default function DashboardOverview() {
           <h3 className="text-sm text-muted-foreground mb-2">Available Balance</h3>
           <p className="text-2xl font-bold text-card-foreground">15,200 UNDEAD</p>
         </Card>
+      </div>
+
+      {/* Portfolio Performance Chart */}
+      <div className="grid grid-cols-1 gap-6">
+        <PortfolioPerformance />
+      </div>
+
+      {/* Risk Assessment and Diversification */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <RiskAssessment />
+        <div className="space-y-6">
+          <DiversificationAnalysis />
+        </div>
       </div>
 
       {/* Portfolio Value Chart */}

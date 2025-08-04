@@ -11,7 +11,7 @@ import { Upload } from "lucide-react";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("Notifications");
-  const [fullName, setFullName] = useState({ first: "Kylie", last: "Lee" });
+  const [fullName, setFullName] = useState({ first: "Douglas", last: "Auclair" });
   const [email, setEmail] = useState("email@example.com");
   const [bio, setBio] = useState("I'm a Sales Assistant based in Melbourne, Australia. I specialize in brand strategy, and customer experience.");
   
@@ -109,7 +109,7 @@ const Settings = () => {
                 <Label className="text-sm font-medium text-card-foreground">Profile Image</Label>
                 <div className="flex items-center gap-6">
                   <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-xl font-medium text-muted-foreground">
-                    KL
+                    DA
                   </div>
                   
                   {/* Upload Area */}

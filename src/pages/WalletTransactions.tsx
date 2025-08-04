@@ -324,16 +324,8 @@ const WalletTransactions = () => {
       {/* Transaction Details Modal */}
       <Dialog open={isTransactionDetailsOpen} onOpenChange={setIsTransactionDetailsOpen}>
         <DialogContent className="sm:max-w-md bg-card border-border">
-          <DialogHeader className="flex flex-row items-center justify-between p-0">
+          <DialogHeader>
             <DialogTitle className="text-lg font-semibold text-card-foreground">Transaction Details</DialogTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsTransactionDetailsOpen(false)}
-              className="text-muted-foreground hover:text-card-foreground"
-            >
-              <X className="w-4 h-4" />
-            </Button>
           </DialogHeader>
           
           {selectedTransaction && (

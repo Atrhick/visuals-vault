@@ -4,6 +4,9 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import WalletConnectModal from "@/components/WalletConnectModal";
 import UserDropdown from "@/components/UserDropdown";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import KeyboardShortcuts from "@/components/KeyboardShortcuts";
+import QuickAccess from "@/components/QuickAccess";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -15,6 +18,7 @@ export default function DashboardLayout({ children, title = "Dashboard Overview"
 
   return (
     <SidebarProvider>
+      <KeyboardShortcuts />
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
         
@@ -39,6 +43,9 @@ export default function DashboardLayout({ children, title = "Dashboard Overview"
           
           {/* Content */}
           <div className="flex-1 bg-background">
+            <div className="p-6 pb-0">
+              <Breadcrumbs />
+            </div>
             {children}
           </div>
         </main>
@@ -49,6 +56,9 @@ export default function DashboardLayout({ children, title = "Dashboard Overview"
         isOpen={isWalletModalOpen} 
         onClose={() => setIsWalletModalOpen(false)} 
       />
+      
+      {/* Quick Access */}
+      <QuickAccess />
     </SidebarProvider>
   );
 }

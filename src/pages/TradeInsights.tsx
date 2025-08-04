@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChevronDown, Search, ZoomIn, BarChart3, TrendingUp, Plus, Activity, AlertTriangle, Target, ArrowUp, ArrowDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import TechnicalIndicators from "@/components/TechnicalIndicators";
 
 interface TradingPair {
   id: string;
@@ -373,6 +374,11 @@ const TradeInsights = () => {
             
             {/* Chart */}
             {chartType === "candlestick" ? <CandlestickChart /> : <LineChart />}
+          </div>
+          
+          {/* Technical Analysis */}
+          <div className="col-span-full">
+            <TechnicalIndicators chartData={chartData} />
           </div>
           
           {/* Trading Panels Sidebar */}
