@@ -8,56 +8,56 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Crypto/Web3 Design System */
-    --background: 252 100% 12%;  /* Deep purple */
-    --foreground: 0 0% 100%;     /* White text */
+    /* Light background with dark sidebar theme */
+    --background: 210 20% 98%;   /* Light gray background #f9fafb */
+    --foreground: 222.2 84% 4.9%; /* Dark text */
 
-    --card: 240 15% 12%;         /* Dark card background */
-    --card-foreground: 0 0% 100%; /* White text on cards */
+    --card: 0 0% 100%;           /* White cards */
+    --card-foreground: 222.2 84% 4.9%; /* Dark text on cards */
 
-    --popover: 240 15% 12%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 217 91% 60%;      /* Bright blue for primary actions */
+    --primary: 213 94% 68%;      /* Bright blue #4285f4 */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 15% 20%;    /* Slightly lighter dark */
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 210 40% 94%;    /* Light secondary */
+    --secondary-foreground: 222.2 84% 4.9%;
 
-    --muted: 240 15% 18%;
-    --muted-foreground: 240 5% 65%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%; /* Muted text color */
 
-    --accent: 142 71% 45%;       /* Green for success states */
+    --accent: 142 71% 45%;       /* Green for positive changes */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 15% 25%;
-    --input: 240 15% 18%;
-    --ring: 217 91% 60%;
+    --border: 214.3 31.8% 91.4%; /* Light borders */
+    --input: 214.3 31.8% 91.4%;
+    --ring: 213 94% 68%;
 
     --radius: 0.75rem;
 
     /* Gradients */
-    --gradient-bg: linear-gradient(135deg, hsl(252 100% 12%) 0%, hsl(280 100% 20%) 50%, hsl(252 100% 12%) 100%);
-    --gradient-card: linear-gradient(135deg, hsl(240 15% 12%) 0%, hsl(240 15% 15%) 100%);
+    --gradient-bg: linear-gradient(135deg, hsl(210 20% 98%) 0%, hsl(210 40% 96%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
     
     /* Shadows */
-    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.3);
-    --shadow-card: 0 20px 40px hsl(0 0% 0% / 0.3);
+    --shadow-glow: 0 0 40px hsl(213 94% 68% / 0.3);
+    --shadow-card: 0 1px 3px hsl(0 0% 0% / 0.1), 0 1px 2px hsl(0 0% 0% / 0.06);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --sidebar-background: 240 15% 12%;
+    --sidebar-background: 235 84% 8%;  /* Dark navy sidebar #070824 */
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary: 213 94% 68%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 15% 20%;
+    --sidebar-accent: 235 70% 12%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 240 15% 25%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-border: 235 60% 15%;
+    --sidebar-ring: 213 94% 68%;
   }
 
   .dark {
@@ -105,6 +105,6 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
 }
