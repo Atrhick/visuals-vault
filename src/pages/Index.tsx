@@ -1,7 +1,7 @@
-import WalletLogin from "@/components/WalletLogin";
+import AuthFlow from "@/components/AuthFlow";
 
 const Index = () => {
-  return <WalletLogin />;
+  return <AuthFlow />;
 };
 
 export default Index;
