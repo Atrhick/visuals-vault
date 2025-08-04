@@ -62,8 +62,7 @@ const AuthFlow = ({ onComplete }: AuthFlowProps) => {
   };
 
   const handleSetupComplete = () => {
-    setCurrentStep("setup-complete");
-    onComplete?.();
+    window.location.href = "/dashboard";
   };
 
   const handleGoBack = () => {
