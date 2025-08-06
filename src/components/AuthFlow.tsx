@@ -38,30 +38,44 @@ const AuthFlow = ({ onComplete }: AuthFlowProps) => {
     navigate('/dashboard');
   };
 
+  // Auto-authenticate when wallet connects successfully
+  useEffect(() => {
+    const autoAuthenticate = async () => {
+      if (isConnected && address && walletLabel && isConnecting) {
+        console.log('🔗 Wallet connected, starting authentication...');
+        
+        try {
+          const authSuccess = await authenticate();
+          console.log('Authentication result:', authSuccess);
+          
+          if (authSuccess) {
+            console.log('✅ Authentication successful, navigating to dashboard');
+            navigate('/dashboard');
+          } else {
+            console.error('❌ Authentication failed');
+            setError("Authentication failed. Please try again.");
+          }
+        } catch (err) {
+          console.error('Authentication error:', err);
+          setError("Authentication failed. Please try again.");
+        } finally {
+          setIsConnecting(false);
+        }
+      }
+    };
+
+    autoAuthenticate();
+  }, [isConnected, address, walletLabel, isConnecting, authenticate, navigate]);
+
   const handleWalletConnect = async () => {
     setIsConnecting(true);
     setError(null);
     
     try {
-      console.log('Starting wallet connection...');
+      console.log('🔌 Starting wallet connection...');
       await connect();
-      console.log('Connect called, waiting for state update...');
-      
-      // Wait a moment for wallet state to update, then authenticate
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      console.log('Connection state:', { isConnected, address, walletLabel });
-      
-      // Authenticate after connection
-      const authSuccess = await authenticate();
-      console.log('Authentication result:', authSuccess);
-      
-      if (authSuccess) {
-        // Navigate directly to dashboard after successful authentication
-        navigate('/dashboard');
-      } else {
-        setError("Authentication failed. Please try again.");
-      }
+      console.log('✅ Connect function completed');
+      // Authentication will be handled by useEffect when state updates
     } catch (err) {
       console.error('Wallet connection error:', err);
       setError(err instanceof Error ? err.message : "Failed to connect wallet");
@@ -70,7 +84,6 @@ const AuthFlow = ({ onComplete }: AuthFlowProps) => {
         description: "Failed to connect wallet. Please try again.",
         variant: "destructive",
       });
-    } finally {
       setIsConnecting(false);
     }
   };
