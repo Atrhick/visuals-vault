@@ -1,8 +1,6 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import WalletConnectModal from "@/components/WalletConnectModal";
+import WalletStatus from "@/components/WalletStatus";
 import UserDropdown from "@/components/UserDropdown";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
@@ -14,7 +12,6 @@ interface DashboardLayoutProps {
 }
 
 export default function DashboardLayout({ children, title = "Dashboard Overview" }: DashboardLayoutProps) {
-  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
 
   return (
     <SidebarProvider>
@@ -31,12 +28,7 @@ export default function DashboardLayout({ children, title = "Dashboard Overview"
             </div>
             
             <div className="flex items-center gap-3">
-              <Button 
-                onClick={() => setIsWalletModalOpen(true)}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium px-6 hover:scale-105 transition-transform"
-              >
-                Connect wallet
-              </Button>
+              <WalletStatus compact={true} />
               <UserDropdown />
             </div>
           </header>
@@ -50,12 +42,6 @@ export default function DashboardLayout({ children, title = "Dashboard Overview"
           </div>
         </main>
       </div>
-      
-      {/* Wallet Connect Modal */}
-      <WalletConnectModal 
-        isOpen={isWalletModalOpen} 
-        onClose={() => setIsWalletModalOpen(false)} 
-      />
       
       {/* Quick Access */}
       <QuickAccess />

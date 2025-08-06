@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Claude-specific files
+.claude/
+CLAUDE.md
+
+# Environment files
+.env
+.env.*
+!.env.example
