@@ -64,25 +64,39 @@ ${timestamp}`;
     chainId?: string
   ): Promise<AuthSession | null> {
     try {
+      console.log('Starting signature verification...', { address, walletLabel, chainId });
+      
       // Get stored challenge
       const challengeStr = sessionStorage.getItem(this.CHALLENGE_KEY);
       if (!challengeStr) {
+        console.error('No challenge found in sessionStorage');
         throw new Error('No authentication challenge found');
       }
       
       const challenge: AuthChallenge = JSON.parse(challengeStr);
+      console.log('Challenge found:', { nonce: challenge.nonce, expires: challenge.expires });
       
       // Check if challenge expired
       if (Date.now() > challenge.expires) {
+        console.error('Challenge expired:', { now: Date.now(), expires: challenge.expires });
         sessionStorage.removeItem(this.CHALLENGE_KEY);
         throw new Error('Authentication challenge expired');
       }
       
+      // Log signature verification details
+      console.log('Verifying signature:', { 
+        signature: signature.slice(0, 10) + '...', 
+        messageLength: challenge.message.length 
+      });
+      
       // Verify signature
       const recoveredAddress = ethers.verifyMessage(challenge.message, signature);
+      console.log('Address recovered from signature:', recoveredAddress);
+      console.log('Expected address:', address);
       
       if (recoveredAddress.toLowerCase() !== address.toLowerCase()) {
-        throw new Error('Invalid signature');
+        console.error('Address mismatch:', { recovered: recoveredAddress, expected: address });
+        throw new Error(`Invalid signature - recovered ${recoveredAddress} but expected ${address}`);
       }
       
       // Clear challenge
@@ -97,12 +111,19 @@ ${timestamp}`;
         chainId
       };
       
+      console.log('Session created successfully:', { address: session.address, expires: new Date(session.expires) });
+      
       // Store session
       this.saveSession(session);
       
       return session;
     } catch (error) {
       console.error('Signature verification failed:', error);
+      console.error('Error details:', {
+        name: error?.name,
+        message: error?.message,
+        stack: error?.stack
+      });
       return null;
     }
   }

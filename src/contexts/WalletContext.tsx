@@ -339,26 +339,40 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
   // Enhanced authentication using AuthService
   const authenticate = useCallback(async (): Promise<boolean> => {
     try {
+      console.log('🔐 Starting authentication process...');
       clearError();
       
       if (!address || !signer || !walletLabel) {
+        console.error('❌ Wallet not properly connected:', { address, signer: !!signer, walletLabel });
         throw new Error('Wallet not properly connected');
       }
       
+      console.log('✅ Wallet state valid:', { address, walletLabel, chainId });
+      
       // Generate challenge
+      console.log('🎲 Generating challenge...');
       const challenge = AuthService.generateChallenge(address);
+      console.log('✅ Challenge generated:', { nonce: challenge.nonce.slice(0, 10) + '...' });
       
       // Sign the challenge
+      console.log('✍️ Requesting signature...');
       const signature = await signMessage(challenge.message);
       if (!signature) {
+        console.error('❌ User rejected signature or signing failed');
         throw new Error('Failed to sign authentication message');
       }
       
+      console.log('✅ Signature obtained:', signature.slice(0, 10) + '...');
+      
       // Verify and create session
+      console.log('🔍 Verifying signature...');
       const newSession = await AuthService.verifySignature(address, signature, walletLabel, chainId || undefined);
       if (!newSession) {
+        console.error('❌ Signature verification failed');
         throw new Error('Authentication verification failed');
       }
+      
+      console.log('✅ Authentication successful!');
       
       // Update state
       setSession(newSession);
@@ -372,6 +386,7 @@ export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
       
       return true;
     } catch (error) {
+      console.error('💥 Authentication failed:', error);
       handleError(error, 'authentication');
       return false;
     }
