@@ -28,27 +28,23 @@ RUN cp src/lib/web3-config.production.ts src/lib/web3-config.ts
 # Build the application
 RUN npm run build
 
-# Production stage with Nginx
-FROM nginx:alpine
-
-# Install gettext for envsubst
-RUN apk add --no-cache gettext
+# Production stage - Use nginx unprivileged image
+FROM nginxinc/nginx-unprivileged:alpine
 
 # Copy custom nginx config
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY --chown=nginx:nginx nginx.conf /etc/nginx/nginx.conf
 
 # Copy built application from build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build --chown=nginx:nginx /app/dist /usr/share/nginx/html
 
-# Create nginx user and set permissions
-RUN touch /var/run/nginx.pid && \
-    chown -R nginx:nginx /var/cache/nginx /var/run/nginx.pid /usr/share/nginx/html
+# Cloud Run expects container to listen on $PORT
+# We'll use a template to substitute the port at runtime
+RUN sed -i 's/listen       8080/listen       ${PORT:-8080}/g' /etc/nginx/nginx.conf && \
+    sed -i 's/listen  \[::\]:8080/listen  \[::\]:${PORT:-8080}/g' /etc/nginx/nginx.conf
 
-# Switch to non-root user
-USER nginx
-
-# Expose port 8080 (Cloud Run default)
+# Expose port 8080 (Cloud Run will override with PORT env)
 EXPOSE 8080
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# nginx-unprivileged already runs as nginx user
+# Start nginx
+CMD ["sh", "-c", "envsubst '$$PORT' < /etc/nginx/nginx.conf > /tmp/nginx.conf && nginx -c /tmp/nginx.conf -g 'daemon off;'"]
