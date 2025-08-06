@@ -3,7 +3,17 @@
     "allow": [
       "Bash(npm install)",
       "Bash(copy:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(find:*)",
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run dev:*)",
+      "Bash(mv:*)",
+      "Bash(npm info:*)",
+      "Bash(rm:*)",
+      "Bash(npx vite:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }

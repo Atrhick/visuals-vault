@@ -3,10 +3,6 @@ import injectedModule from '@web3-onboard/injected-wallets';
 import walletConnectModule from '@web3-onboard/walletconnect';
 import coinbaseModule from '@web3-onboard/coinbase';
 import { config, getAllChains, getAppMetadata, debugLog, debugError } from './config';
-
-// Import hardware wallets - these are now installed
-import ledgerModule from '@web3-onboard/ledger';
-import trezorModule from '@web3-onboard/trezor';
 import type { Chain } from '@web3-onboard/common';
 
 // Export chains for use in other components

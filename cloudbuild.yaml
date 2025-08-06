@@ -25,7 +25,7 @@ steps:
       '--region', 'us-west1',
       '--platform', 'managed',
       '--allow-unauthenticated',
-      '--port', '8080',
+      # Remove the --port flag to let Cloud Run use its default
       '--memory', '1Gi',
       '--cpu', '1',
       '--max-instances', '10',

@@ -22,8 +22,10 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Use production web3 config
-RUN cp src/lib/web3-config.production.ts src/lib/web3-config.ts
+# Use production web3 config if it exists
+RUN if [ -f src/lib/web3-config.production.ts ]; then \
+    cp src/lib/web3-config.production.ts src/lib/web3-config.ts; \
+    fi
 
 # Build the application
 RUN npm run build
@@ -31,20 +33,22 @@ RUN npm run build
 # Production stage - Use nginx unprivileged image
 FROM nginxinc/nginx-unprivileged:alpine
 
-# Copy custom nginx config
-COPY --chown=nginx:nginx nginx.conf /etc/nginx/nginx.conf
+# Install envsubst (it's part of gettext package)
+RUN apk add --no-cache gettext
+
+# Copy custom nginx config template
+COPY --chown=nginx:nginx nginx.conf /etc/nginx/templates/nginx.conf.template
 
 # Copy built application from build stage
 COPY --from=build --chown=nginx:nginx /app/dist /usr/share/nginx/html
 
-# Cloud Run expects container to listen on $PORT
-# We'll use a template to substitute the port at runtime
-RUN sed -i 's/listen       8080/listen       ${PORT:-8080}/g' /etc/nginx/nginx.conf && \
-    sed -i 's/listen  \[::\]:8080/listen  \[::\]:${PORT:-8080}/g' /etc/nginx/nginx.conf
+# Create necessary directories for nginx with correct permissions
+RUN mkdir -p /tmp/client_temp /tmp/proxy_temp_path /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp && \
+    chown -R nginx:nginx /tmp/client_temp /tmp/proxy_temp_path /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp
 
-# Expose port 8080 (Cloud Run will override with PORT env)
+# The container will listen on the PORT environment variable
+# Default to 8080 if not set, but Cloud Run will override this
 EXPOSE 8080
 
-# nginx-unprivileged already runs as nginx user
-# Start nginx
-CMD ["sh", "-c", "envsubst '$$PORT' < /etc/nginx/nginx.conf > /tmp/nginx.conf && nginx -c /tmp/nginx.conf -g 'daemon off;'"]
+# Start nginx with environment variable substitution
+CMD ["/bin/sh", "-c", "envsubst '$$PORT' < /etc/nginx/templates/nginx.conf.template > /tmp/nginx.conf && exec nginx -c /tmp/nginx.conf -g 'daemon off;'"]
