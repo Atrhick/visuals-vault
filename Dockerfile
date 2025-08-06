@@ -22,8 +22,9 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Copy production environment variables
-COPY .env.production .env
+# Copy environment files
+COPY .env .env
+COPY .env.production .env.production
 
 # Use production web3 config if it exists
 RUN if [ -f src/lib/web3-config.production.ts ]; then \
