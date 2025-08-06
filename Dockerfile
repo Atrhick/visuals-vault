@@ -30,31 +30,33 @@ RUN if [ -f src/lib/web3-config.production.ts ]; then \
 # Build the application
 RUN npm run build
 
-# Production stage - Use nginx unprivileged image
-FROM nginxinc/nginx-unprivileged:alpine
-
-# Switch to root temporarily to install packages
-USER root
-
-# Install envsubst (it's part of gettext package)
-RUN apk add --no-cache gettext
-
-# Copy custom nginx config template
-COPY --chown=nginx:nginx nginx.conf /etc/nginx/templates/nginx.conf.template
+# Production stage - Use standard nginx alpine
+FROM nginx:alpine
 
 # Copy built application from build stage
-COPY --from=build --chown=nginx:nginx /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Create necessary directories for nginx with correct permissions
-RUN mkdir -p /tmp/client_temp /tmp/proxy_temp_path /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp && \
-    chown -R nginx:nginx /tmp/client_temp /tmp/proxy_temp_path /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp
+# Create a simple nginx config that listens on port 80
+RUN echo 'server { \
+    listen 80; \
+    listen [::]:80; \
+    server_name _; \
+    root /usr/share/nginx/html; \
+    index index.html; \
+    location / { \
+        try_files $uri $uri/ /index.html; \
+    } \
+    location /health { \
+        access_log off; \
+        return 200 "OK"; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
 
-# Switch back to nginx user
-USER nginx
+# Remove the default nginx config
+RUN rm -f /etc/nginx/conf.d/default.conf.template
 
-# The container will listen on the PORT environment variable
-# Default to 8080 if not set, but Cloud Run will override this
-EXPOSE 8080
+# Expose port 80
+EXPOSE 80
 
-# Start nginx with environment variable substitution
-CMD ["/bin/sh", "-c", "envsubst '$$PORT' < /etc/nginx/templates/nginx.conf.template > /tmp/nginx.conf && exec nginx -c /tmp/nginx.conf -g 'daemon off;'"]
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
