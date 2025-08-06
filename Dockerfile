@@ -33,6 +33,9 @@ RUN npm run build
 # Production stage - Use nginx unprivileged image
 FROM nginxinc/nginx-unprivileged:alpine
 
+# Switch to root temporarily to install packages
+USER root
+
 # Install envsubst (it's part of gettext package)
 RUN apk add --no-cache gettext
 
@@ -45,6 +48,9 @@ COPY --from=build --chown=nginx:nginx /app/dist /usr/share/nginx/html
 # Create necessary directories for nginx with correct permissions
 RUN mkdir -p /tmp/client_temp /tmp/proxy_temp_path /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp && \
     chown -R nginx:nginx /tmp/client_temp /tmp/proxy_temp_path /tmp/fastcgi_temp /tmp/uwsgi_temp /tmp/scgi_temp
+
+# Switch back to nginx user
+USER nginx
 
 # The container will listen on the PORT environment variable
 # Default to 8080 if not set, but Cloud Run will override this
