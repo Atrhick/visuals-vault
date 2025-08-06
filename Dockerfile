@@ -27,6 +27,15 @@ RUN if [ -f src/lib/web3-config.production.ts ]; then \
     cp src/lib/web3-config.production.ts src/lib/web3-config.ts; \
     fi
 
+# Build arguments for environment variables
+ARG VITE_WALLETCONNECT_PROJECT_ID
+ARG VITE_APP_URL
+
+# Set build environment variables
+ENV VITE_WALLETCONNECT_PROJECT_ID=${VITE_WALLETCONNECT_PROJECT_ID}
+ENV VITE_APP_URL=${VITE_APP_URL}
+ENV NODE_ENV=production
+
 # Build the application
 RUN npm run build
 
