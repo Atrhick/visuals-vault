@@ -31,11 +31,21 @@ RUN npm run build
 # Production stage with Nginx
 FROM nginx:alpine
 
+# Install gettext for envsubst
+RUN apk add --no-cache gettext
+
 # Copy custom nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy built application from build stage
 COPY --from=build /app/dist /usr/share/nginx/html
+
+# Create nginx user and set permissions
+RUN touch /var/run/nginx.pid && \
+    chown -R nginx:nginx /var/cache/nginx /var/run/nginx.pid /usr/share/nginx/html
+
+# Switch to non-root user
+USER nginx
 
 # Expose port 8080 (Cloud Run default)
 EXPOSE 8080
