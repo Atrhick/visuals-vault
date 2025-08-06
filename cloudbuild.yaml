@@ -39,8 +39,8 @@ steps:
 
 # Default substitution variables (can be overridden in Cloud Build trigger)
 substitutions:
-  _VITE_WALLETCONNECT_PROJECT_ID: 'PLACEHOLDER_WALLETCONNECT_PROJECT_ID'
-  _VITE_APP_URL: 'https://${_SERVICE_NAME}-${_RANDOM_SUFFIX}-${_REGION_ID}.a.run.app'
+  _VITE_WALLETCONNECT_PROJECT_ID: 'a68601546569a5c135d1371332c35576'
+  _VITE_APP_URL: 'https://pivot-protocol-service.run.app'
 
 options:
   machineType: 'E2_HIGHCPU_8'

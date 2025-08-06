@@ -3,7 +3,7 @@ import { z } from 'zod';
 // Environment variable schema
 const envSchema = z.object({
   // WalletConnect
-  VITE_WALLETCONNECT_PROJECT_ID: z.string().min(1, 'WalletConnect Project ID is required').default('DEVELOPMENT_PLACEHOLDER'),
+  VITE_WALLETCONNECT_PROJECT_ID: z.string().min(1, 'WalletConnect Project ID is required').default('a68601546569a5c135d1371332c35576'),
   
   // App Configuration
   VITE_APP_NAME: z.string().default('Pivot Protocol'),
