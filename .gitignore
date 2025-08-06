@@ -31,3 +31,4 @@ CLAUDE.md
 .env
 .env.*
 !.env.example
+!.env.production

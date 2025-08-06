@@ -13,7 +13,9 @@
       "Bash(npm info:*)",
       "Bash(rm:*)",
       "Bash(npx vite:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

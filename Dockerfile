@@ -22,19 +22,27 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+# Copy production environment variables
+COPY .env.production .env
+
 # Use production web3 config if it exists
 RUN if [ -f src/lib/web3-config.production.ts ]; then \
     cp src/lib/web3-config.production.ts src/lib/web3-config.ts; \
     fi
 
 # Build arguments for environment variables
-ARG VITE_WALLETCONNECT_PROJECT_ID
-ARG VITE_APP_URL
+ARG VITE_WALLETCONNECT_PROJECT_ID=a68601546569a5c135d1371332c35576
+ARG VITE_APP_URL=https://pivot-protocol-service.run.app
 
-# Set build environment variables
-ENV VITE_WALLETCONNECT_PROJECT_ID=${VITE_WALLETCONNECT_PROJECT_ID}
-ENV VITE_APP_URL=${VITE_APP_URL}
+# Set build environment variables with fallback values
+ENV VITE_WALLETCONNECT_PROJECT_ID=${VITE_WALLETCONNECT_PROJECT_ID:-a68601546569a5c135d1371332c35576}
+ENV VITE_APP_URL=${VITE_APP_URL:-https://pivot-protocol-service.run.app}
+ENV VITE_APP_NAME="Pivot Protocol"
 ENV NODE_ENV=production
+
+# Debug: Print environment variables (remove in production)
+RUN echo "Building with VITE_WALLETCONNECT_PROJECT_ID: $VITE_WALLETCONNECT_PROJECT_ID"
+RUN echo "Building with VITE_APP_URL: $VITE_APP_URL"
 
 # Build the application
 RUN npm run build
