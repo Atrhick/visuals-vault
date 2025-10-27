@@ -2,6 +2,9 @@ import Onboard from '@web3-onboard/core';
 import injectedModule from '@web3-onboard/injected-wallets';
 import walletConnectModule from '@web3-onboard/walletconnect';
 import coinbaseModule from '@web3-onboard/coinbase';
+// Hardware wallet modules removed for faster dev loading
+// import ledgerModule from '@web3-onboard/ledger';
+// import trezorModule from '@web3-onboard/trezor';
 import { config, getAllChains, getAppMetadata, debugLog, debugError } from './config';
 import type { Chain } from '@web3-onboard/common';
 
@@ -29,23 +32,23 @@ const coinbase = coinbaseModule({
   darkMode: true
 });
 
-// Hardware wallets for production  
-const ledger = ledgerModule({
-  walletConnectVersion: 2,
-  projectId: config.VITE_WALLETCONNECT_PROJECT_ID
-});
+// Hardware wallets removed for faster dev loading
+// const ledger = ledgerModule({
+//   walletConnectVersion: 2,
+//   projectId: config.VITE_WALLETCONNECT_PROJECT_ID
+// });
 
-const trezor = trezorModule({
-  email: 'support@pivotprotocol.com',
-  appUrl: config.VITE_APP_URL
-});
+// const trezor = trezorModule({
+//   email: 'support@pivotprotocol.com',
+//   appUrl: config.VITE_APP_URL
+// });
 
 // Get app metadata from config
 const appMetadata = getAppMetadata();
 
-// Initialize Web3 Onboard with production-ready configuration
+// Initialize Web3 Onboard with essential wallets only
 export const web3Onboard = Onboard({
-  wallets: [injected, walletConnect, coinbase, ledger, trezor],
+  wallets: [injected, walletConnect, coinbase],
   chains,
   appMetadata,
   accountCenter: {
@@ -119,7 +122,7 @@ export const initializeOnboard = () => {
   try {
     debugLog('Initializing Web3-Onboard with config:', {
       chains: chains.length,
-      wallets: ['injected', 'walletconnect', 'coinbase', 'ledger', 'trezor'],
+      wallets: ['injected', 'walletconnect', 'coinbase'],
       appName: appMetadata.name
     });
     return web3Onboard;
